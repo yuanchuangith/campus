@@ -1,0 +1,150 @@
+.position_div{
+    height: 1330px;
+    margin-top: 10px;
+   
+    border-radius: 4px;
+  
+  }
+  .divheight{
+    border-radius: 4px;
+   
+    padding-top: 10px;
+    overflow:auto; 
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 1000px;
+  }
+  .position_div{
+    height: 1330px;
+    margin-top: 10px;
+   
+    border-radius: 4px;
+  
+  }
+  a{
+    text-decoration-line: none;
+    color: #000;
+  }
+  .zhanweiIDnv{
+    min-height: 88px;
+  }
+  .obedient{
+    padding-top: 25px;
+    width: 80%;
+    margin: auto;
+    .protraitPhoto{
+      width: 40px;
+      height: 40px;
+      border-radius: 50px;
+    }
+    .obedient_discuss{
+      height: 1200px;
+      margin-top: 10px;
+      .discuss_content{
+        margin-top: 5px;
+      }
+      .discuss_content_item{
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        padding-top: 10px;
+       
+        margin: auto;
+        display:  flex;
+        .protrait_photo{
+        
+          align-self: center;
+          width: 10%;
+          
+      
+        }
+        .protrait_photo>span{
+          margin-left:  10px;
+        }
+      
+        .reply_button{
+          align-self: center;
+        
+        }
+        .content{
+          width: 90%;
+        
+          padding-top: 10px;
+          .content_top{
+            display: flex;
+            .tag_count>span{
+              margin-left: 20px;
+            }
+            
+        }
+        .content_data{
+            margin-left: 2%;
+        }
+        .content_user{
+            margin-left: 2%;
+        }
+        .Occupy{
+        min-height: 10px;
+        }
+        .content_top>div{
+           
+            min-width: 20%;
+        }
+      .content_buttom{
+        width: 70%;
+        margin-top:auto;
+        margin-left:5%;
+       
+        max-height:330px;
+        
+      }
+        .discuss_reply{
+          display:  flex;
+          min-height: 53px;
+        }
+       .load{
+        padding-top:5px;
+        padding-bottom:3px;
+        width: 90%;
+        margin: auto;
+       }
+    .content_images{
+        .images{
+          display: flex;
+          flex-wrap: wrap;
+          .images_item{
+            margin-left: 15px;
+            margin-top: 5px;
+           
+          }
+          .images_item::v-deep{
+            div {
+             width: 80px;
+              height: 80px;
+              border-radius: 7px;
+             }
+           }
+           .replay_images_item{
+            margin-left: 15px;
+            margin-top: 5px;
+           }
+           .replay_images_item
+           ::v-deep{
+            div {
+             width: 40px;
+              height: 40px;
+              border-radius: 7px;
+             }
+           }
+        }
+      
+        
+      }
+    
+      }
+    
+     }
+     
+    }
+  }
+
+ 

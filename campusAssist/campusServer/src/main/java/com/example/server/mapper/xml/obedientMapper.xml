@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.obedientMapper">
+
+    <select id="getHatObenident" resultType="com.example.server.model.view.obenident">
+        SELECT COUNT(DISTINCT r.id,r.id) as replyCount,o.obedientID,o.userID,o.images,o.title,o.textContent,o.createTime,o.praiseNum,o.contenrtNum ,o.userName,o.protraitPhoto  from replyobedientcontent as r INNER JOIN(
+            SELECT obedientID,ob.userID,title,textContent,ob.images,ob.createTime,praiseNum,contenrtNum,userName,protraitPhoto from (SELECT obedientID,userID,title,textContent,images,createTime,praiseNum,contenrtNum
+            from obedient ORDER BY praiseNum desc LIMIT #{strart},#{end}) as ob  LEFT JOIN (SELECT userName , userID,protraitPhoto from `user`) as u on ob.userID=u.userID )
+            as o on o.obedientID=r.obedientID GROUP BY o.obedientID
+
+
+    </select>
+    <select id="getTopPlant" resultType="com.example.server.model.entity.Obedientclassification">
+        SELECT classificationID,textContent,title from obedientclassification ORDER BY  heat LIMIT 0,5
+    </select>
+    <select id="getindexObedient" resultType="com.example.server.model.view.conpany.seacherConpanyNmae">
+
+
+
+
+
+    </select>
+    <select id="getPlate" resultType="com.example.server.model.view.conpany.seacherConpanyNmae">
+
+        SELECT count(id)  as jobNum, o.title as conpanyName ,o.praiseNum as provice from replyobedientcontent as r
+        INNER JOIN(SELECT obedientID , title ,praiseNum from obedient
+        <where><if test="classificationID!=null and classificationID!='' " >
+            classificationID=#{classificationID}
+
+        </if>
+            and  title like  CONCAT('%',#{key},'%')
+        </where>
+        ORDER BY praiseNum desc LIMIT 0,6)  as o  on r.obedientID=o.obedientID GROUP BY r.obedientID
+    </select>
+    <select id="getSearchObenident" resultType="com.example.server.model.view.obenident">
+        SELECT COUNT(DISTINCT r.id,r.id) as replyCount,o.obedientID,o.userID,o.images,o.title,o.textContent,o.createTime,o.praiseNum,o.contenrtNum ,o.userName,o.protraitPhoto  from replyobedientcontent as r INNER JOIN(
+            SELECT obedientID,ob.userID,title,textContent,ob.images,ob.createTime,praiseNum,contenrtNum,userName,protraitPhoto from (SELECT obedientID,userID,title,textContent,images,createTime,praiseNum,contenrtNum
+           from obedient  <where><if test="classificationID!=null and classificationID!='' " >
+        classificationID=#{classificationID}
+
+    </if>
+
+    </where>  ORDER BY praiseNum desc LIMIT #{strart},#{end}) as ob  LEFT JOIN (SELECT userName , userID,protraitPhoto from `user`) as u on ob.userID=u.userID )
+            as o on o.obedientID=r.obedientID GROUP BY o.obedientID
+    </select>
+    <select id="getSearchObenidentKey" resultType="com.example.server.model.view.obenident">
+
+        SELECT COUNT(DISTINCT r.id,r.id) as replyCount,o.obedientID,o.userID,o.images,o.title,o.textContent,o.createTime,o.praiseNum,o.contenrtNum ,o.userName,o.protraitPhoto  from replyobedientcontent as r INNER JOIN(
+        SELECT obedientID,ob.userID,title,textContent,ob.images,ob.createTime,praiseNum,contenrtNum,userName,protraitPhoto from (SELECT obedientID,userID,title,textContent,images,createTime,praiseNum,contenrtNum
+        from obedient  <where><if test="classificationID!=null and classificationID!='' " >
+        classificationID=#{classificationID}
+
+    </if>
+        and  title like  CONCAT('%',#{key},'%')
+    </where>  ORDER BY praiseNum desc LIMIT #{strart},#{end}) as ob  LEFT JOIN (SELECT userName , userID,protraitPhoto from `user`) as u on ob.userID=u.userID )
+        as o on o.obedientID=r.obedientID GROUP BY o.obedientID
+    </select>
+    <select id="getObedientDetial" resultType="com.example.server.model.view.obedient.getObedientDetial">
+
+        SELECT  obedientID,u.userID ,title,textContent,images,praiseNum,contenrtNum ,ob.createTime ,userName,realName,protraitPhoto,sex,numCount from (
+    SELECT  o.obedientID,o.userID ,title,textContent,images,o.praiseNum,contenrtNum ,o.createTime ,COUNT(DISTINCT id,id) as numCount from replyobedientcontent
+        as r INNER JOIN(SELECT obedientID,userID ,title,textContent,images,praiseNum,contenrtNum ,createTime from obedient
+        <where>
+            <if test="obedientID!=null and obedientID!='' " >
+                obedientID=#{obedientID}
+
+            </if>
+            and obedientshow="1" and delTag="1" </where> ) as o  on r.obedientID=o.obedientID)
+            as ob LEFT JOIN `user` as u on ob.userID=u.userID  WHERE u.delTag="1"
+
+    </select>
+    <select id="getReplys" resultType="com.example.server.model.view.obedient.getReply">
+
+        SELECT replyID,u.userID,content,praiseNum,ReplyToPerson,r.createTime,userName,realName,protraitPhoto,sex
+        from (SELECT replyID,userID,content,imgages,praiseNum,ReplyToPerson,createTime from replyobedientcontent <where>
+            <if test="obedientID!=null and obedientID!='' " >
+        obedientID=#{obedientID}
+
+    </if>
+        and replyshow="1" and delTag="1" </where> ORDER BY praiseNum LIMIT #{strat},#{end} ) as r LEFT JOIN `user` as u on r.userID=u.userID WHERE u.delTag="1"
+    </select>
+</mapper>

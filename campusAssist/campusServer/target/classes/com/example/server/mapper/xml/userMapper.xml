@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.userMapper">
+    <update id="updatePW">
+        update  User set passWord=#{passWord}    <where>
+        <if test="userid!=null and userid!='' ">
+            and userID =#{userid}
+        </if>
+
+
+    </where>
+
+
+    </update>
+    <update id="updateAvatar">
+        update  User set protraitPhoto=#{imgName}    <where>
+        <if test="userid!=null and userid!='' ">
+            and userID =#{userid}
+        </if>
+
+
+    </where>
+
+
+
+    </update>
+    <update id="updateUserInfo">
+
+        update  User set updateTime=#{updateTime}
+         <if test="birthday!=null and birthday!='' ">
+        , birthday=#{birthday}
+    </if>
+        <if test="realName!=null and realName!='' ">
+           , realName=#{realName}
+        </if>
+        <if test="sex!=null and sex!='' ">
+           , sex=#{sex} , onceUpdateSex=0
+        </if>
+
+        <where>
+        <if test="userid!=null and userid!='' ">
+            and userID =#{userid}
+        </if>
+
+
+    </where>
+    </update>
+
+
+    <select id="getUser" resultType="com.example.server.model.view.accountEntity.Userinfo"
+    >
+        SELECT
+        *
+        FROM User
+        <where>
+            <if test="name!=null and name!='' ">
+                and username =#{name}
+            </if>
+
+
+        </where>
+    </select>
+    <select id="querUserList" resultType="com.example.server.model.entity.User">
+        SELECT
+            *
+        FROM User
+    </select>
+    <select id="getUserByID" resultType="com.example.server.model.view.accountEntity.Userinfo">
+        SELECT
+        *
+        FROM User
+        <where>
+            <if test="userid!=null and userid!='' ">
+                and userID =#{userid}
+            </if>
+
+
+        </where>
+    </select>
+    <select id="getUserContentInfo" resultType="com.example.server.model.vo.user.userContentInfo">
+        SELECT * from (SELECT chargeMoney as money from rechargemoney  <where>
+        <if test="userid!=null and userid!='' ">
+            and userID =#{userid}
+        </if>
+
+
+    </where> ) as money,
+       (SELECT COUNT(id)  as contentNum , SUM(praiseNum) as contentPiraise FROM positioncontents  <where>
+        <if test="userid!=null and userid!='' ">
+            and userID =#{userid}
+        </if>
+
+
+    </where> ) as contentNum ,
+(SELECT SUM(praiseNum) as replyPraiseNumSum from  replypositioncontent  <where>
+        <if test="userid!=null and userid!='' ">
+            and userID =#{userid}
+        </if>
+
+
+    </where>)    as r
+
+    </select>
+    <select id="getOrder" resultType="com.example.server.model.entity.RechargeTrade">
+
+
+
+        SELECT outTradeNo,totalAmount,tradeModel,tradeName,createTime,timeStampT FROM rechargetrade   <where>
+        <if test="userid!=null and userid!='' ">
+            and userID =#{userid}
+        </if>
+        <if test="tradeModel!=null and tradeModel!='' ">
+            and tradeModel =#{tradeModel}
+        </if>
+           and  delTag='1'
+    </where>
+    </select>
+    <select id="getUserContent" resultType="com.example.server.model.view.userEntity.getContentInfo">
+        SELECT COUNT(DISTINCT id,id) as num ,p.contentID,p.content,p.praiseNum,p.createTime from 	replypositioncontent as r
+  INNER JOIN( SELECT contentID,content,praiseNum,createTime from positioncontents  <where>
+        <if test="userid!=null and userid!='' ">
+            and userID = #{userid}
+        </if> and contentshow="1" and delTag="1"
+    </where>
+        ) as p on p.contentID=r.contentID  GROUP BY p.contentID
+
+    </select>
+</mapper>

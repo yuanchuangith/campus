@@ -1,0 +1,5 @@
+export const UtilVar = {
+    ENC: false, //返回结果是否加密
+    baseUrl: `http://locolhost:8888`,
+    code: 401,
+}

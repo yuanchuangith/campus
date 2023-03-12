@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.workMapper">
+    <select id="getProviceId" resultType="com.example.server.model.entity.Provicegroupinfo"
+    >
+
+
+        select proviceInfoID from provicegroupinfo order by createTime desc limit 1
+    </select>
+<select id="getProviceInfo" resultType="com.example.server.model.view.workEntity.proviceInfo">
+    select name,value from provicesum    <where>
+    <if test="id!=null and id!='' ">
+        and proviceInfoID =#{id}
+    </if> </where>
+</select>
+    <select id="geteducationRequires" resultType="com.example.server.model.view.workEntity.educationRequire">
+
+        SELECT  compeducationRequire,count(compeducationRequire) AS compeducationRequireSum  from  position GROUP BY compeducationRequire HAVING compeducationRequireSum>100
+    </select>
+    <select id="getPostionS" resultType="com.example.server.model.entity.Position">
+
+        select jobID ,description,textContent,tag,companyCharacter,companyName,interestedNum,publishData  from position  ORDER BY interestedNum desc LIMIT 100
+
+    </select>
+    <select id="getContent" resultType="com.example.server.model.view.workEntity.workContent">
+        select u.userID,u.userName,u.protraitPhoto,c.contentID,c.jobID,c.content,c.praiseNum, p.tag ,p.companyName,p.wage,p.url,p.textContent FROM `user` as u  left join
+            (SELECT  contentID,jobID,userID,content,praiseNum,delTag,contentshow  FROM  positioncontents WHERE positioncontents.id >= (SELECT FLOOR(RAND() *
+            ((SELECT MAX(id) FROM positioncontents )-(SELECT MIN(id) FROM positioncontents )) + (SELECT MIN(id) FROM positioncontents ))) )as c  on u.userID=c.userID
+            LEFT JOIN position as p on c.jobID= p.jobID where c.delTag=1 and c.contentshow=1   LIMIT 15
+
+
+
+    </select>
+    <select id="getpositionNumRank" resultType="com.example.server.model.view.workEntity.positionNumRank">
+
+        select pm.title as title, count( pm.middleID) as  middleIDCount ,pm.classificationID FROM positionbigclassification as pb left join positionmiddleclassification as pm on pb.
+                                                                                                                                                                                      classificationID=pm.classificationID left join positionclassification as pc on  pm.middleID=pc.middleID left join  position p on pc.positionID=p.positionID GROUP BY pm.middleID HAVING
+            middleIDCount>1000
+
+    </select>
+    <select id="getpositionBigNum" resultType="com.example.server.model.view.workEntity.positionBigClass">
+        select pb.classificationID, pb.title ,count(pb.classificationID) as count FROM positionbigclassification as pb left join positionmiddleclassification as pm on pb.classificationID=pm.classificationID left join positionclassification as pc on  pm.middleID=pc.middleID left join  position p on pc.positionID=p.positionID GROUP BY pm.classificationID
+
+    </select>
+    <select id="getprovices" resultType="com.example.server.model.view.workEntity.provice">SELECT *FROM viewSelectProvice</select>
+    <select id="selectPosition"  statementType="CALLABLE" resultType="com.example.server.model.view.workEntity.positionSimply">
+
+
+        {call selectPosition(#{satrt,mode=IN},#{end,mode=IN})}
+    </select>
+    <select id="selectPositionByProvice" statementType="CALLABLE" resultType="com.example.server.model.view.workEntity.positionSimply" >
+
+        {call selectPositionByProvice(#{proviceName,mode=IN},#{satrt,mode=IN},#{end,mode=IN})}
+    </select>
+    <select id="getPositionProviceTotal" resultType="com.example.server.model.view.workEntity.positionTotal">
+
+        select count(id) as total from  position   <where>
+        <if test="proviceName!=null and proviceName!='' ">
+            and provice =#{proviceName}
+        </if> </where>
+    </select>
+    <select id="getPositionTotal" resultType="com.example.server.model.view.workEntity.positionTotal">
+        select count(id) as total from  position
+    </select>
+    <select id="getPositionIndustryTotal" resultType="com.example.server.model.view.workEntity.positionTotal">
+        select count(id) as total from  position <where>
+        <if test="industryID!=null and industryID!='' ">
+            and positionID =#{industryID}
+        </if> </where>
+    </select>
+    <select id="getPositionmiddleclassifications"
+            resultType="com.example.server.model.view.workEntity.classificationEntity">SELECT  middleID as nextId,classificationID as preId ,title  from positionmiddleclassification</select>
+    <select id="getPositionclassifications"
+            resultType="com.example.server.model.view.workEntity.classificationEntity">SELECT  positionID as nextId,middleID as preId ,title  from positionclassification</select>
+    <select id="getPositionbigclassifications"
+            resultType="com.example.server.model.view.workEntity.classificationEntity">SELECT  classificationID as nextId ,title  from positionbigclassification</select>
+    <select id="selectPositionByProviceandIndustryID"
+            resultType="com.example.server.model.view.workEntity.positionSimply" statementType="CALLABLE">
+        {call selectPositionByProviceandIndustryID(#{proviceName,mode=IN},#{industryID},#{satrt,mode=IN},#{end,mode=IN})}
+    </select>
+    <select id="selectPositionByIndustryID"
+            resultType="com.example.server.model.view.workEntity.positionSimply" statementType="CALLABLE">
+
+        {call selectPositionByIndustryID(#{industryID,mode=IN,jdbcType=VARCHAR},#{satrt,mode=IN},#{end,mode=IN})}
+    </select>
+    <select id="getPositionIndustryIDAndProviceTotal"
+            resultType="com.example.server.model.view.workEntity.positionTotal">
+        select count(id) as total from  position <where>
+        <if test="industryID!=null and industryID!='' ">
+            and positionID =#{industryID}
+        </if>
+        <if test="proviceName!=null and proviceName!='' ">
+            and provice =#{proviceName}
+        </if>
+    </where>
+    </select>
+    <select id="searchByConpanyNmae" resultType="com.example.server.model.view.workEntity.searchKey" statementType="CALLABLE">
+        {CALL  searchByconpanyName(#{name,mode=IN,jdbcType=VARCHAR})}
+    </select>
+    <select id="searchByTagNmae" resultType="com.example.server.model.view.workEntity.searchKey" statementType="CALLABLE">
+        CALL  searchBytagName(#{name,mode=IN,jdbcType=VARCHAR})
+    </select>
+    <select id="searchByLikeTagNmae" resultType="com.example.server.model.view.workEntity.searchKey">
+        select DISTINCT tag ,companyName,wage from position <where>
+        <if test="name!=null and name!='' ">
+            tag like #{name}
+        </if> </where> LIMIT 15
+    </select>
+    <select id="searchByLikeConpanyNmae" resultType="com.example.server.model.view.workEntity.searchKey">
+        select DISTINCT tag  as companyName,companyName as tag,wage from position <where>
+        <if test="name!=null and name!='' ">
+            companyName like #{name}
+        </if> </where> LIMIT 15
+    </select>
+    <select id="getSearchByconpanyNameAndProviceNamePosition"
+            resultType="com.example.server.model.view.workEntity.positionSimply" statementType="CALLABLE">
+        {  CALL  getSearchByconpanyNameAndProviceNamePosition(#{proviceName,mode=IN,jdbcType=VARCHAR},#{conpanyName,mode=IN,jdbcType=VARCHAR}
+            ,#{satrt,mode=IN},#{end,mode=IN})}
+
+    </select>
+    <select id="getSearchByconpanyNamePosition"
+            resultType="com.example.server.model.view.workEntity.positionSimply" statementType="CALLABLE">
+        {  CALL getSearchByconpanyNamePosition(#{keyWord,mode=IN,jdbcType=VARCHAR}
+            ,#{satrt,mode=IN},#{end,mode=IN})}
+    </select>
+    <select id="getSearchByLikeConpanyNamePositionOrProvice"
+            resultType="com.example.server.model.view.workEntity.positionSimply">
+
+        select p.positionID, p.id, jobID,tag,p.description,wage,wekare,addressUrl,url,companyName ,companyCharacter,companySize,companyIndustry,publishData,provice, pb. title
+        from  positionbigclassification as pb left join positionmiddleclassification as pm on pm.classificationID=pb.classificationID left JOIN
+            positionclassification as pc on pc.middleID=pm.middleID left join position as p on  p.positionID=pc.positionID inner join
+            (select id    from position WHERE
+        <where>
+            <if test="proviceName!=null and proviceName!='' ">
+                and provice =#{proviceName}
+            </if>
+            <if test="keyWord!=null and keyWord!='' ">
+                and companyName like CONCAT( #{keyWord},'%')
+            </if> </where> order by id limit 0, 15) as b on p.id = b.id and p.positionID=pc.positionID;
+
+    </select>
+    <select id="getSearchByProviceNameAndTagPosition"
+            resultType="com.example.server.model.view.workEntity.positionSimply" statementType="CALLABLE">
+
+        { CALL getSearchByProviceNameAndTagPosition(#{proviceName,mode=IN,jdbcType=VARCHAR},#{keyWord,mode=IN,jdbcType=VARCHAR}
+                ,#{satrt,mode=IN},#{end,mode=IN})}
+
+    </select>
+    <select id="getSearchByProviceNameAndLikeTagPosition"
+            resultType="com.example.server.model.view.workEntity.positionSimply" statementType="CALLABLE">
+       { CALL getSearchByProviceNameAndLikeTagPosition(#{proviceName,mode=IN,jdbcType=VARCHAR},#{keyWord,mode=IN,jdbcType=VARCHAR}
+            ,#{satrt,mode=IN},#{end,mode=IN})}
+    </select>
+    <select id="getSearchByLikeTagPosition"
+            resultType="com.example.server.model.view.workEntity.positionSimply" statementType="CALLABLE">
+
+            {call getSearchByLikeTagPosition(#{keyWord,mode=IN,jdbcType=VARCHAR}
+                ,#{satrt,mode=IN},#{end,mode=IN})}
+    </select>
+    <select id="getSearchByTagPosition" resultType="com.example.server.model.view.workEntity.positionSimply" statementType="CALLABLE">
+        {call getSearchByTagPosition(#{keyWord,mode=IN,jdbcType=VARCHAR}
+            ,#{satrt,mode=IN},#{end,mode=IN})}
+    </select>
+    <select id="getSearchTatolByTag" resultType="com.example.server.model.view.workEntity.positionTotal" statementType="CALLABLE">
+
+        {call getSearchTatalByTag(#{keyWord,mode=IN,jdbcType=VARCHAR},#{provicName,mode=IN,jdbcType=VARCHAR}
+            ,#{model,mode=IN},#{whetherProvice,mode=IN})}
+    </select>
+    <select id="getSearchTatolByConpany" resultType="com.example.server.model.view.workEntity.positionTotal" statementType="CALLABLE">
+
+        {call getSearchTatalByConpany(#{keyWord,mode=IN,jdbcType=VARCHAR},#{provicName,mode=IN,jdbcType=VARCHAR}
+            ,#{model,mode=IN},#{whetherProvice,mode=IN})}
+    </select>
+    <select id="getPositionDetail" resultType="com.example.server.model.entity.Position">
+      SELECT * FROM position as p INNER JOIN (SELECT companyName fROM position  <where>
+        <if test="jobID!=null and jobID!='' ">
+            and jobID =#{jobID}
+        </if>
+    </where>  )  as pc on p.companyName=pc.companyName
+    </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+
+.top{
+    display: flex;
+    border-bottom: 1px solid #e8e8e8;
+    .close{
+        width: 3%;
+        margin-left: auto;
+    }
+    .title{
+        width: 20%;
+    }
+}
+.content{
+    display: flex;
+    align-items: center;
+   
+    margin-top: 5px;
+    .input_text{
+        width: 60%;
+      
+    }
+
+    .submit_content{
+        width: 15%;
+        margin-left: auto;
+    }
+}
+.buttom_upload{
+    margin-top: 5px;
+   
+}
+.buttom_upload>div{
+    margin-left: 5px;
+    margin-bottom: 3px;
+}
+.rate{
+    width: 80%;
+    margin-left:auto;
+    margin-top: 20px;;
+}

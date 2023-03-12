@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/campusAssist.iml" filepath="$PROJECT_DIR$/campusAssist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/campusBack/campusBack.iml" filepath="$PROJECT_DIR$/campusBack/campusBack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/campusServer/campusServe.iml" filepath="$PROJECT_DIR$/campusServer/campusServe.iml" />
+    </modules>
+  </component>
+</project>

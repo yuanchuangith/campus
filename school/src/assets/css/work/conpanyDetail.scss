@@ -1,0 +1,103 @@
+.position_div{
+    height: 1330px;
+    margin-top: 10px;
+   
+    border-radius: 4px;
+  
+  }
+  .checkPosition{
+    height: 40px;
+    align-self: center;
+  
+    margin: auto;
+
+  }
+  .position_item{
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    padding-top: 10px;
+   
+    margin: auto;
+    display:  flex;
+  }
+  .position>div{
+    margin-top: 5px;
+    min-height: 45px;
+     
+  
+
+}
+.position{
+    width: 90%;
+  
+    padding-top: 10px;
+  
+}
+.position_top{
+    display: flex;
+    
+}
+.position_date{
+    margin-left: 2%;
+}
+.position_tag{
+    margin-left: 2%;
+}
+.position_top>div{
+   
+    min-width: 20%;
+}
+.position_conpany{
+    margin-left: auto;
+}
+.position_div{
+    height: 1330px;
+    margin-top: 10px;
+   
+    border-radius: 4px;
+  
+  }
+  .textColorWar{
+    color: #E6A23C;
+  }
+  .textPosition{
+    color: #606266;
+  }
+  .textchiyaoPosition{
+    color: #909399;
+  }
+ .dataColor{
+  color: #B39999;
+ }
+ .tag_conpanyName_color{
+  color:  #0058a6;
+ }
+ .tag_conpanyName_color>a{text-decoration: none;color:#0058a6;}
+
+ .wage_color{
+  color: #ff6000;
+ }
+ .description_colo{
+  color: #666;
+ }
+ .wekare_text{
+    background-color: #fff;
+    font-size: 12px;
+        float: left;
+    height: 20px;
+    line-height: 18px;
+    margin-right: 8px;
+    padding: 0 3px;
+    color: #B39999;
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+  }
+  .wekare_eltag{
+    background-color: #fff;
+    
+       
+    margin-right: 8px;
+   
+
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+  }

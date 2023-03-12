@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.PositionMapper">
+    <select id="getPositionContent" resultType="com.example.server.model.view.positionContent.getPositionContents">
+
+        SELECT u.userID,protraitPhoto,userName, contentID,content,pc.images,ReplyToPerson,praiseNum,pc.createTime from `user` as u INNER JOIN (SELECT   contentID,userID,content,images,ReplyToPerson,praiseNum,createTime
+        from positioncontents      <where>
+        <if test="jobID!=null and jobID!='' ">
+            and jobID =#{jobID}
+        </if>
+
+        and delTag='1' and contentshow='1'
+    </where>  ORDER BY id limit #{starpage},#{endpage}) as pc on pc.userID=u.userID where u.delTag='1'
+    </select>
+    <select id="getGroupBycontentIdReply"
+            resultType="com.example.server.model.view.positionContent.getReplyPositionContents" >
+        SELECT  userID,userName,protraitPhoto,replyID,replycontent,replyimages,replyReplyToPerson,replypraiseNum,replycreateTime,replycontentID,rowNumber,tagContentID
+        from ( SELECT temp.userID, temp.userName,temp.protraitPhoto, temp.replyID,temp.replycontent as replycontent,temp.replyimages as replyimages,temp.replyReplyToPerson
+        as replyReplyToPerson,temp.replypraiseNum as replypraiseNum,temp.replycreateTime as replycreateTime ,temp.replycontentID as replycontentID,if(@bank=replycontentID
+        COLLATE utf8mb4_0900_ai_ci,@rowNumber:=@rowNumber+1,@rowNumber:=1) as rowNumber ,@bank:= replycontentID as tagContentID   from (
+        SELECT rid, u.userID,u.protraitPhoto,u.userName, content.replyID,content.replycontent as replycontent,content.replyimages as replyimages,content.replyReplyToPerson
+        as replyReplyToPerson,content.replypraiseNum as replypraiseNum,content.replycreateTime as replycreateTime ,content.replycontentID as replycontentID from `user`
+        as u INNER JOIN(SELECT r.id as rid, replyID,r.userID as replyuserID,r.contentID as replycontentID,r.content as replycontent,r.images as replyimages,r.ReplyToPerson
+        as replyReplyToPerson,r.praiseNum as replypraiseNum,r.createTime as replycreateTime FROM replypositioncontent as r INNER JOIN ( SELECT  id, contentID from
+        positioncontents <where>
+        <if test="jobID!=null and jobID!='' ">
+            and jobID =#{jobID}
+        </if>
+
+
+        and delTag='1' and contentshow='1'  </where> ORDER BY id limit #{starpage},#{endpage}) as c on  r.contentID=c.contentID WHERE r.delTag='1' and
+        r.contentshow='1') as content  on u.userID=content.replyuserID WHERE u.delTag='1' ORDER BY replycontentID,rid  ) as temp ,(SELECT @rowNumber:=0,@bank:='')
+        as b GROUP BY replycontentID,replyID) as result WHERE result.rowNumber &lt;=3
+    </select>
+    <select id="getContentCount" resultType="com.example.server.model.view.positionContent.getContentCount">
+
+
+        SELECT positioncontentCount ,groupCount, a.contentID  from (SELECT count(id) as positioncontentCount ,contentID from positioncontents <where>
+        <if test="jobID!=null and jobID!='' ">
+            and jobID =#{jobID}
+        </if>
+
+        and delTag='1' and contentshow='1'
+    </where> ) as a  LEFT JOIN (SELECT count(rp.id) as groupCount,ptemp.contentID as contentID from replypositioncontent as rp INNER JOIN
+            (SELECT contentID   from positioncontents <where>
+        <if test="jobID!=null and jobID!='' ">
+            and jobID =#{jobID}
+        </if>
+
+        and delTag='1' and contentshow='1'
+    </where>  ORDER BY id limit #{starpage},#{endpage})
+                as ptemp on rp.contentID=ptemp.contentID WHERE   rp.delTag='1' and  rp.contentshow='1' GROUP BY  rp.contentID) as b on a.contentID=b.contentID
+
+    </select>
+    <select id="getcontentIdReply"
+            resultType="com.example.server.model.view.positionContent.getReplyPositionContents">
+         SELECT r.userID,userName,protraitPhoto, replyID,replycontent,replyimages,replyReplyToPerson,replypraiseNum,replycreateTime,replycontentID
+                from `user` as u INNER JOIN (SELECT replyID,userID,content as  replycontent,images as  replyimages,ReplyToPerson as replyReplyToPerson,praiseNum as replypraiseNum,createTime as replycreateTime,contentID as replycontentID FROM replypositioncontent
+        <where>
+            <if test="contentID!=null and contentID!='' ">
+                and contentID =#{contentID}
+            </if>
+
+            and delTag='1' and contentshow='1'
+        </where>      and delTag='1' and contentshow='1' ORDER BY id LIMIT #{starpage},#{endpage}) as r  on r.userID=u.userID WHERE u.delTag='1'
+
+    </select>
+</mapper>
